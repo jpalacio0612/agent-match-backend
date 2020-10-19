@@ -1,4 +1,6 @@
 const Agent = require('../models/agent.model');
+const Contact = require('../models/contact.model');
+const matchAlgoritm = require('../utils/matchAlgoritm');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
@@ -35,8 +37,10 @@ module.exports = {
 
   getMatch(req, res) {
     const { userId } = req.body;
-    const { myLatitude } = req.body;
     const { myLongitude } = req.body;
+    const { myLatitude } = req.body;
+    const myPosition = [myLongitude, myLatitude];
+    const range = 10;
 
     Agent.findByIdAndUpdate(
       userId,
@@ -48,7 +52,9 @@ module.exports = {
     )
       .then((agent) => {
         console.log(agent);
-        // Contacts.find().then((contacts) =>
+        Contact.find().then((contacts) => {
+          console.log(matchAlgoritm(myPosition, contacts, range));
+        });
         //   matchAlgoritm(agent, contacts, range),
         // );
       })
