@@ -1,6 +1,6 @@
 const { Schema, model } = require('mongoose');
 
-const agentSchema = new Schema(
+const contactSchema = new Schema(
   {
     name: {
       type: String,
@@ -26,13 +26,9 @@ const agentSchema = new Schema(
       type: Number,
       required: [true, 'Zip code is required'],
     },
-    profession: {
-      type: String,
-      required: [true, 'Profession is required'],
-    },
     userType: {
       type: String,
-      required: [true, 'Usertype is required'],
+      required: [true, 'UserType ir required'],
     },
     lastLatitude: Number,
     lastLongitude: Number,
@@ -42,6 +38,6 @@ const agentSchema = new Schema(
   },
 );
 
-const Agent = model('Agent', agentSchema);
+const Contact = model('Contact', contactSchema);
 
-module.exports = Agent;
+module.exports = Contact;

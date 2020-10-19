@@ -1,4 +1,4 @@
-const Agent = require('../models/agent.model');
+const Contact = require('../models/contact.model');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
@@ -8,9 +8,12 @@ module.exports = {
     try {
       const { password } = data;
       const encryptedPasword = await bcrypt.hash(password, 8);
-      const agent = await Agent.create({ ...data, password: encryptedPasword });
+      const contact = await Contact.create({
+        ...data,
+        password: encryptedPasword,
+      });
 
-      const token = jwt.sign({ id: agent._id }, 'keyword');
+      const token = jwt.sign({ id: contact._id }, 'keyword');
       res.status(201).json({ token });
     } catch (error) {
       res.status(400).json(err);
@@ -18,7 +21,7 @@ module.exports = {
   },
 
   list(req, res) {
-    Agent.find()
+    Contact.find()
       .then((tasks) => res.status(200).json(tasks))
       .catch((error) => res.status(400).json(error));
   },
@@ -26,7 +29,7 @@ module.exports = {
   findById(req, res) {
     const { id } = req.params;
 
-    Agent.findById(id)
+    Contact.findById(id)
       .then((task) => res.status(200).json(task))
       .catch(() =>
         res.status(400).json({ message: `Could not find the agent` }),
@@ -38,7 +41,7 @@ module.exports = {
     const { myLatitude } = req.body;
     const { myLongitude } = req.body;
 
-    Agent.findByIdAndUpdate(
+    Contact.findByIdAndUpdate(
       userId,
       {
         lastLatitude: myLatitude,
@@ -46,8 +49,8 @@ module.exports = {
       },
       { new: true },
     )
-      .then((agent) => {
-        console.log(agent);
+      .then((contact) => {
+        console.log(contact);
         // Contacts.find().then((contacts) =>
         //   matchAlgoritm(agent, contacts, range),
         // );
