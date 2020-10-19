@@ -39,8 +39,8 @@ module.exports = {
     const { userId } = req.body;
     const { myLongitude } = req.body;
     const { myLatitude } = req.body;
+    const { range } = req.body;
     const myPosition = [myLongitude, myLatitude];
-    const range = 10;
 
     Agent.findByIdAndUpdate(
       userId,
@@ -51,18 +51,11 @@ module.exports = {
       { new: true },
     )
       .then((agent) => {
-        console.log(agent);
         Contact.find().then((contacts) => {
-          console.log(matchAlgoritm(myPosition, contacts, range));
+          const response = matchAlgoritm(myPosition, contacts, range);
+          res.status(200).json(response);
         });
-        //   matchAlgoritm(agent, contacts, range),
-        // );
       })
       .catch((err) => res.status(400).json(err));
-
-    // traer posiciones de clientes
-    // Algoritmo emparejador [posicion propia, Lista de posiciones, rango]
-    // Devuelve un array con los nombres y coordenadas
-    res.status(200).json({ message: 'welldone' });
   },
 };
