@@ -28,9 +28,13 @@ module.exports = {
 
       const token = jwt.sign({ id: user._id }, 'keyword');
 
-      res
-        .status(200)
-        .json({ token: token, userId: user._id, userType: userType });
+      res.status(200).json({
+        token: token,
+        userId: user._id,
+        userType: userType,
+        lastLatitude: user.lastLatitude,
+        lastLongitude: user.lastLongitude,
+      });
     } catch (error) {
       res.status(401).json({ message: error.message });
     }

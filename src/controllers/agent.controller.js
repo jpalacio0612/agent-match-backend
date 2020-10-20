@@ -52,8 +52,8 @@ module.exports = {
     )
       .then((agent) => {
         Contact.find().then((contacts) => {
-          const response = matchAlgoritm(myPosition, contacts, range);
-          res.status(200).json(response);
+          const matches = matchAlgoritm(myPosition, contacts, range);
+          res.status(200).json({ matches: matches, agent: agent });
         });
       })
       .catch((err) => res.status(400).json(err));
