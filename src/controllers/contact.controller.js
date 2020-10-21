@@ -1,6 +1,8 @@
 const Contact = require('../models/contact.model');
+const Agent = require('../models/agent.model');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const matchAlgoritm = require('../utils/matchAlgoritm');
 
 module.exports = {
   async signup(req, res) {
@@ -13,7 +15,7 @@ module.exports = {
         password: encryptedPasword,
       });
 
-      const token = jwt.sign({ id: contact._id }, 'keyword');
+      const token = jwt.sign({ id: contact._id }, process.env.SECRET);
       res.status(201).json({ token });
     } catch (error) {
       res.status(400).json(err);
@@ -38,8 +40,10 @@ module.exports = {
 
   getMatch(req, res) {
     const { userId } = req.body;
-    const { myLatitude } = req.body;
     const { myLongitude } = req.body;
+    const { myLatitude } = req.body;
+    const { range } = req.body;
+    const myPosition = [myLongitude, myLatitude];
 
     Contact.findByIdAndUpdate(
       userId,
@@ -50,16 +54,11 @@ module.exports = {
       { new: true },
     )
       .then((contact) => {
-        console.log(contact);
-        // Contacts.find().then((contacts) =>
-        //   matchAlgoritm(agent, contacts, range),
-        // );
+        Agent.find().then((agents) => {
+          const matches = matchAlgoritm(myPosition, agents, range);
+          res.status(200).json({ matches: matches, user: contact });
+        });
       })
       .catch((err) => res.status(400).json(err));
-
-    // traer posiciones de clientes
-    // Algoritmo emparejador [posicion propia, Lista de posiciones, rango]
-    // Devuelve un array con los nombres y coordenadas
-    res.status(200).json({ message: 'welldone' });
   },
 };

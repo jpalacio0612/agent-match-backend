@@ -12,7 +12,7 @@ const contactSchema = new Schema(
     },
     email: {
       type: String,
-      required: [true, 'Age is required'],
+      required: [true, 'Email is required'],
     },
     password: {
       type: String,

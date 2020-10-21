@@ -15,7 +15,7 @@ module.exports = {
         throw Error('Your seesion has expired!');
       }
 
-      const { id } = jwt.verify(token, 'keyword');
+      const { id } = jwt.verify(token, process.env.SECRET);
 
       req.user = id;
 

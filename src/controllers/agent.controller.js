@@ -12,9 +12,10 @@ module.exports = {
       const encryptedPasword = await bcrypt.hash(password, 8);
       const agent = await Agent.create({ ...data, password: encryptedPasword });
 
-      const token = jwt.sign({ id: agent._id }, 'keyword');
+      const token = jwt.sign({ id: agent._id }, process.env.SECRET);
       res.status(201).json({ token });
     } catch (error) {
+      console.log(error);
       res.status(400).json(err);
     }
   },
@@ -53,7 +54,7 @@ module.exports = {
       .then((agent) => {
         Contact.find().then((contacts) => {
           const matches = matchAlgoritm(myPosition, contacts, range);
-          res.status(200).json({ matches: matches, agent: agent });
+          res.status(200).json({ matches: matches, user: agent });
         });
       })
       .catch((err) => res.status(400).json(err));

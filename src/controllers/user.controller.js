@@ -26,14 +26,14 @@ module.exports = {
         throw Error('User/Password invalid!');
       }
 
-      const token = jwt.sign({ id: user._id }, 'keyword');
+      const token = jwt.sign({ id: user._id }, process.env.SECRET);
 
       res.status(200).json({
         token: token,
         userId: user._id,
         userType: userType,
-        lastLatitude: user.lastLatitude,
-        lastLongitude: user.lastLongitude,
+        lastLatitude: user.lastLatitude || 0,
+        lastLongitude: user.lastLongitude || 0,
       });
     } catch (error) {
       res.status(401).json({ message: error.message });
